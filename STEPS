@@ -3,4 +3,10 @@ Used 'ping [IP address of computer B]' from command prompt, from computer A [hos
 Got 'timed out', repeatedly.  
 Destination PC is safely ignoring my ping because the Windows Firewall blocks inbound IPv6 echo requests by default.
 
-Attempting to 
+To fix this, I need to tell the destination computer's firewall that it is allowed to respond to IPv6 pings.
+
+In CP I ran:   
+netsh advfirewall firewall add rule name="Allow IPv6 Inbound Ping" dir=in action=allow protocol=icmpv6 profile=private
+Response: Ok
+
+Go to host computer to ping destination IPv6 address
