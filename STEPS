@@ -1,0 +1,6 @@
+Verify that two computers can speak to each other.
+Used 'ping [IP address of computer B]' from command prompt, from computer A [host].
+Got 'timed out', repeatedly.  
+Destination PC is safely ignoring my ping because the Windows Firewall blocks inbound IPv6 echo requests by default.
+
+Attempting to 
