@@ -43,7 +43,8 @@ Scope Name Interface Index RSS Capable RDMA Capable Speed    IpAddress
 
 Interpretation from Gemini AI: "Your output shows that SMB is correctly bound and listening across all your IPv6 interfaces on Interface Index 14 (your 2.5 Gbps adapter). It is listening on your Link-Local address (fe80::), your temporary Global addresses, and your static/stable Global IPv6 address (2603:...::191)."
 
-Now we create the Share folder using PowerShell Admin.  
+Now we create the Share folder using PowerShell Admin on the host computer. 
+
 
 # 1. Create the physical folder on the C drive with your preferred name
 New-Item -Path "C:\Network Share" -ItemType Directory -Force
@@ -60,7 +61,7 @@ What This Just Did
 • Physically: You now have a folder located at C:\Network Share on that computer's drive.
 • Logically: It is now being broadcast to your home network under the name Network Share.
 
-Run PowerShell
+Additionally I ran in PowerShell:
 
 "# This registers the folder to the network under a clean name without spaces to prevent bugs
 New-SmbShare -Name "LabShare" -Path "C:\Network Share" -FullAccess "Everyone" -Force
