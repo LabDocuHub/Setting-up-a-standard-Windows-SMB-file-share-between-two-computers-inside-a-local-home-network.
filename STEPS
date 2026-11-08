@@ -43,3 +43,13 @@ Scope Name Interface Index RSS Capable RDMA Capable Speed    IpAddress
 
 Interpretation: Your output shows that SMB is correctly bound and listening across all your IPv6 interfaces on Interface Index 14 (your 2.5 Gbps adapter). It is listening on your Link-Local address (fe80::), your temporary Global addresses, and your static/stable Global IPv6 address (2603:...::191).
 
+Now we create the Share folder with PowerShell Admin.  
+
+# 1. Create the physical folder on the C drive with your preferred name
+New-Item -Path "C:\Network Share" -ItemType Directory -Force
+
+# 2. Create the network SMB share with the exact same name
+New-SmbShare -Name "Network Share" -Path "C:\Network Share" -FullAccess "Everyone"
+
+# 3. Ensure the Windows Firewall allows File Sharing over the Private network profile
+Enable-NetFirewallRule -DisplayGroup "File and Printer Sharing" -Profile Private
