@@ -52,4 +52,20 @@ New-Item -Path "C:\Network Share" -ItemType Directory -Force
 New-SmbShare -Name "Network Share" -Path "C:\Network Share" -FullAccess "Everyone"
 
 # 3. Ensure the Windows Firewall allows File Sharing over the Private network profile
-Enable-NetFirewallRule -DisplayGroup "File and Printer Sharing" -Profile Private
+Enable-NetFirewallRule -DisplayGroup "File and Printer Sharing" -Profile Private  
+
+
+What This Just Did
+
+• Physically: You now have a folder located at C:\Network Share on that computer's drive.
+• Logically: It is now being broadcast to your home network under the name Network Share.
+
+
+Step 1: Map the Share via the Client's Command Line
+
+Open a standard Command Prompt or PowerShell window on your client machine and run the following command to map the share to an available drive letter (we will use Z: as an example):
+cmd
+net use Z: "\\2603:6011:3701:fe0d:9ba:5684:9303:a4dd\Network Share"
+
+Issue
+
