@@ -60,12 +60,16 @@ What This Just Did
 • Physically: You now have a folder located at C:\Network Share on that computer's drive.
 • Logically: It is now being broadcast to your home network under the name Network Share.
 
+Run PowerShell
 
-Step 1: Map the Share via the Client's Command Line
+"# This registers the folder to the network under a clean name without spaces to prevent bugs
+New-SmbShare -Name "LabShare" -Path "C:\Network Share" -FullAccess "Everyone" -Force
 
-Open a standard Command Prompt or PowerShell window on your client machine and run the following command to map the share to an available drive letter (we will use Z: as an example):
-cmd
-net use Z: "\\2603:6011:3701:fe0d:9ba:5684:9303:a4dd\Network Share"
+# This opens the firewall on this computer so other machines can talk to it
+Enable-NetFirewallRule -DisplayGroup "File and Printer Sharing" -Profile Private,Public"
 
-Issue
+Now using ipconfig to find an extra randomized identifier alongside your manual/static lease (::191).  
 
+Open an Administrative PowerShell window on your client computer (the one you are trying to access the files from), paste this exact command, and press Enter:
+powershell
+New-PSDrive -Name Z -PSProvider FileSystem -Root "\\2603:6011:3701:fe0d:fde8:e9b4:8050:7a8\Network Share" -Credential (Get-Credential)
