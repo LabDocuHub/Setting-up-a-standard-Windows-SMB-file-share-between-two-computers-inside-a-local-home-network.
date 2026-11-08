@@ -1,33 +1,33 @@
 Verify that two computers can speak to each other.
-Used 'ping [IP address of computer B]' from command prompt, from computer A [host].
+Used 'ping IP address of client computer B' from command prompt, from host computer A.
 Got 'timed out', repeatedly.  
-Destination PC is safely ignoring my ping because the Windows Firewall blocks inbound IPv6 echo requests by default.
+Client PC is safely ignoring my ping because the Windows Firewall blocks inbound IPv6 echo requests by default.
 
-To fix this, I need to tell the destination computer's firewall that it is allowed to respond to IPv6 pings.
+To fix this, I need told the client computer's firewall that it is allowed to respond to IPv6 pings.
 
 In CP I ran:   
 netsh advfirewall firewall add rule name="Allow IPv6 Inbound Ping" dir=in action=allow protocol=icmpv6 profile=private
 Response: Ok
 
-Go to host computer to ping destination IPv6 address
-I got reply from the destination computer.  
+I went to host computer to ping client IPv6 address
+I got reply from the client computer.  
 
-Now that the underlying network fabric is responsive, I am moving back up to my primary goal: establishing the local Windows SMB file share lab over IPv6.  
+Now that the underlying network fabric is responsive, I moved back up to my primary goal: establishing the local Windows SMB file share lab over IPv6.  
 
 Verify and Enable the SMB Protocols  
 
-Before creating a folder share, I must ensure that the Windows SMB server features and network protocols are enabled and listening on my network interfaces  
+Before creating a folder share, I ensured that the Windows SMB server features and network protocols are enabled and listening on my network interfaces  
 
 Run the following commands on both machines in an Administrative PowerShell window to lay the groundwork: (Run both commands in PowerShell Admin.)
 
 1. Verify the SMB Server Configuration
-Ensure your machines are configured to allow inbound SMB traffic:
-powershell
+Ensure your machines are configured to allow inbound SMB traffic in PowerShell:
+
 Get-SmbServerConfiguration | Select-Object EnableSMB1Protocol, EnableSMB2Protocol  
 
 2. Verify SMB Binding to IPv6
-Ensure that the SMB server is actively listening on your IPv6 interfaces:
-powershell
+Ensure that the SMB server is actively listening on your IPv6 interfaces in PowerShell:
+
 Get-SmbServerNetworkInterface
 
 Result  
@@ -41,9 +41,9 @@ Scope Name Interface Index RSS Capable RDMA Capable Speed    IpAddress
 *          18              False       False        10 Gbps  172.20.160.1
 *          14              False       False        2.5 Gbps 192.168.8.191
 
-Interpretation: Your output shows that SMB is correctly bound and listening across all your IPv6 interfaces on Interface Index 14 (your 2.5 Gbps adapter). It is listening on your Link-Local address (fe80::), your temporary Global addresses, and your static/stable Global IPv6 address (2603:...::191).
+Interpretation from Gemini AI: "Your output shows that SMB is correctly bound and listening across all your IPv6 interfaces on Interface Index 14 (your 2.5 Gbps adapter). It is listening on your Link-Local address (fe80::), your temporary Global addresses, and your static/stable Global IPv6 address (2603:...::191)."
 
-Now we create the Share folder with PowerShell Admin.  
+Now we create the Share folder using PowerShell Admin.  
 
 # 1. Create the physical folder on the C drive with your preferred name
 New-Item -Path "C:\Network Share" -ItemType Directory -Force
