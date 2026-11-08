@@ -10,3 +10,36 @@ netsh advfirewall firewall add rule name="Allow IPv6 Inbound Ping" dir=in action
 Response: Ok
 
 Go to host computer to ping destination IPv6 address
+I got reply from the destination computer.  
+
+Now that the underlying network fabric is responsive, I am moving back up to my primary goal: establishing the local Windows SMB file share lab over IPv6.  
+
+Verify and Enable the SMB Protocols  
+
+Before creating a folder share, I must ensure that the Windows SMB server features and network protocols are enabled and listening on my network interfaces  
+
+Run the following commands on both machines in an Administrative PowerShell window to lay the groundwork: (Run both commands in PowerShell Admin.)
+
+1. Verify the SMB Server Configuration
+Ensure your machines are configured to allow inbound SMB traffic:
+powershell
+Get-SmbServerConfiguration | Select-Object EnableSMB1Protocol, EnableSMB2Protocol  
+
+2. Verify SMB Binding to IPv6
+Ensure that the SMB server is actively listening on your IPv6 interfaces:
+powershell
+Get-SmbServerNetworkInterface
+
+Result  
+Scope Name Interface Index RSS Capable RDMA Capable Speed    IpAddress
+---------- --------------- ----------- ------------ -----    ---------
+*          18              False       False        10 Gbps  fe80::89f3:65f8:d09a:e33f
+*          14              False       False        2.5 Gbps fe80::7dae:4cf4:4cb0:d2c5
+*          14              False       False        2.5 Gbps 2603:6011:3701:fe0d:fde8:e9b4:8050:7a8
+*          14              False       False        2.5 Gbps 2603:6011:3701:fe0d:e958:cd76:621d:cdf2
+*          14              False       False        2.5 Gbps 2603:6011:3701:fe0d::191
+*          18              False       False        10 Gbps  172.20.160.1
+*          14              False       False        2.5 Gbps 192.168.8.191
+
+Interpretation: Your output shows that SMB is correctly bound and listening across all your IPv6 interfaces on Interface Index 14 (your 2.5 Gbps adapter). It is listening on your Link-Local address (fe80::), your temporary Global addresses, and your static/stable Global IPv6 address (2603:...::191).
+
