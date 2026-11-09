@@ -74,3 +74,33 @@ Now using ipconfig to find an extra randomized identifier alongside your manual/
 Open an Administrative PowerShell window on your client computer (the one you are trying to access the files from), paste this exact command, and press Enter:
 powershell
 New-PSDrive -Name Z -PSProvider FileSystem -Root "\\2603:6011:3701:fe0d:fde8:e9b4:8050:7a8\Network Share" -Credential (Get-Credential)
+
+
+BREAK
+
+
+Step-by-Step Walkthrough of Updates Needed
+
+To ensure your setup functions correctly when mapping from your Windows 11 Home client machine, you need to make two specific updates to your current client notes and script execution steps.
+
+Update 1: Swap out the raw IPv6 address for the Windows Literal Format
+
+Windows networks cannot natively interpret colons (:) inside network paths. You must change the colons to hyphens and append .ipv6-literal.net.
+• Old Path: \\2603:6011:3701:fe0d:fde8:e9b4:8050:7a8\Network Share
+• New Path: \\2603-6011-3701-fe0d-fde8-e9b4-8050-7a8.ipv6-literal.net\LabShare
+
+Update 2: Correct the PowerShell Client Command Syntax
+
+Your original command uses standard powershell context entry formatting within the block, but the path parameters are mismatched. Replace your existing New-PSDrive command on the client computer with this exact syntax:
+powershell
+New-PSDrive -Name "Z" -PSProvider FileSystem -Root "\\2603-6011-3701-fe0d-fde8-e9b4-8050-7a8.ipv6-literal.net\LabShare" -Credential (Get-Credential)
+
+Summary of Active Shares on Your Host
+
+Because of the commands you executed, your Windows 11 Pro host machine is now cleanly hosting one folder via two functional paths:
+1. \\2603-6011-3701-fe0d-fde8-e9b4-8050-7a8.ipv6-literal.net\Network Share (Standard Name)
+2. \\2603-6011-3701-fe0d-fde8-e9b4-8050-7a8.ipv6-literal.net\LabShare (Recommended Name—Clean & No Spaces)
+
+
+BACK
+
