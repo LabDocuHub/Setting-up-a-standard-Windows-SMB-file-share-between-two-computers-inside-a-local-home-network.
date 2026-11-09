@@ -104,3 +104,57 @@ Because of the commands you executed, your Windows 11 Pro host machine is now cl
 
 BACK
 
+Trying to change the path of the variable to a new label "LabShare"
+
+powershell
+# 1. Clean up any old partial shares to prevent duplicate naming conflicts
+Remove-SmbShare -Name "Network Share" -Confirm:$false -ErrorAction SilentlyContinue
+Remove-SmbShare -Name "LabShare" -Confirm:$false -ErrorAction SilentlyContinue
+
+# 2. Re-create the network broadcast with corrected native parameters
+New-SmbShare -Name "LabShare" -Path "C:\Network Share" -FullAccess "Everyone"
+
+# 3. Encrypt your custom lab password string safely
+$Password = ConvertTo-SecureString "Sister-bluebird-flying-high-above-the-sun5#" -AsPlainText -Force
+
+# 4. Create your local account with the proper standalone switch parameter formatting
+New-LocalUser -Name "CopperChicken_Fish12" -Password $Password -Description "SMB Lab Account" -PasswordNeverExpires
+
+# 5. Apply full network share control modifications to your custom user ID
+Grant-SmbShareAccess -Name "LabShare" -AccountName "CopperChicken_Fish12" -AccessRight Full -Confirm:$false
+
+Result:
+
+Name                 Enabled Description
+----                 ------- -----------
+CopperChicken_Fish12 True    SMB Lab Account
+
+AvailabilityType       : NonClustered
+CachingMode            : Manual
+CATimeout              : 0
+CompressData           : False
+ConcurrentUserLimit    : 0
+ContinuouslyAvailable  : False
+CurrentUsers           : 0
+Description            :
+DirectoryHandleLeasing : True
+EncryptData            : False
+FolderEnumerationMode  : Unrestricted
+IdentityRemoting       : False
+Infrastructure         : False
+IsolatedTransport      : False
+LeasingMode            : Full
+Name                   : LabShare
+Path                   : C:\Network Share
+QoSFlowScope           : File
+QoSPolicyId            : {00000000-0000-0000-0000-000000000000}
+Scoped                 : False
+ScopeName              : *
+SecurityDescriptor     : O:SYG:SYD:(A;;FA;;;WD)
+ShadowCopy             : False
+ShareState             : Online
+ShareType              : FileSystemDirectory
+SmbInstance            : Default
+Special                : False
+Temporary              : False
+Volume                 : \\?\Volume{b6527b8a-f674-47b2-8fa6-0cbb20b0d2d7}\
